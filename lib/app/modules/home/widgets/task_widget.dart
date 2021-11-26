@@ -33,14 +33,20 @@ class _TaskWidgetState extends State<TaskWidget> {
                 blurRadius: 10)
           ]),
       child: ListTile(
-          leading: Container(
-            decoration: BoxDecoration(
-                color: widget.task.isCompleted ? Colors.green : Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.grey, width: .8)),
-            child: Icon(
-              Icons.check,
-              color: Colors.white,
+          leading: GestureDetector(
+            onTap: (){
+              widget.task.isCompleted = !widget.task.isCompleted;
+              widget.task.save();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: widget.task.isCompleted ? Colors.green : Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey, width: .8)),
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
             ),
           ),
           title: widget.task.isCompleted
@@ -52,6 +58,12 @@ class _TaskWidgetState extends State<TaskWidget> {
                 ) : TextField(
                   controller: taskController,
                   decoration: InputDecoration(border: InputBorder.none),
+                  onSubmitted: (value){
+                    if(value.isNotEmpty){
+                    widget.task.name = value;
+                    widget.task.save();
+                    }
+                  }
                 )
               ,
           trailing: Text(
