@@ -10,7 +10,14 @@ Future<void> main() async {
     // register adapter
     Hive.registerAdapter<Task>(TaskAdapter());
     // open boxes
-    await Hive.openBox<Task>('tasks');
+    var box = await Hive.openBox<Task>('tasks');
+    // delete data from previous day
+    box.values.forEach((task) {
+      if(task.createdAt.day != DateTime.now().day){
+        box.delete(task.id);
+      }
+     });
+
   runApp(BaseWidget(child: MyApp()));
 }
 
